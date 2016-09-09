@@ -1,33 +1,40 @@
 <template>
-  <div class="add-amount">
+  <div class="add-amount content-padded">
 
-    <h1 class="text-primary text-xs-center">{{ amount }}</h1>
+    <h1 class="text-primary text-xs-center m-y-3">
+      $
+      <span v-if="store.state.amount">{{ store.state.amount }}</span>
+      <span v-else>0</span>
+      <small class="text-muted" @click="clear" v-if="store.state.amount"><i class="fa fa-fw fa-close"></i></small>
+    </h1>
 
     <div class="numbers">
-      <a class="btn btn-outline-primary text-primary" @click="press(1)">1</a>
-      <a class="btn btn-outline-primary text-primary" @click="press(2)">2</a>
-      <a class="btn btn-outline-primary text-primary" @click="press(3)">3</a>
-      <a class="btn btn-outline-primary text-primary" @click="press(4)">4</a>
-      <a class="btn btn-outline-primary text-primary" @click="press(5)">5</a>
-      <a class="btn btn-outline-primary text-primary" @click="press(6)">6</a>
-      <a class="btn btn-outline-primary text-primary" @click="press(7)">7</a>
-      <a class="btn btn-outline-primary text-primary" @click="press(8)">8</a>
-      <a class="btn btn-outline-primary text-primary" @click="press(9)">9</a>
-      <a class="btn btn-outline-primary text-primary" >&nbsp</a>
-      <a class="btn btn-outline-primary text-primary" @click="press(0)">0</a>
-      <a class="btn btn-outline-primary text-primary" @click="press('.')">.</a>
-
-      <button class="btn btn-primary btn-lg m-t-1" @click="add">Add Amount</button>
+      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(1)">1</div>
+      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(2)">2</div>
+      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(3)">3</div>
+      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(4)">4</div>
+      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(5)">5</div>
+      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(6)">6</div>
+      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(7)">7</div>
+      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(8)">8</div>
+      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(9)">9</div>
+      <div class="number btn btn-outlined btn-positive" >&nbsp</div>
+      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(0)">0</div>
+      <div class="number btn btn-outlined btn-positive" v-touch:tap="press('.')">.</div>
     </div>
+  
+    <button class="btn btn-positive btn-block" @click="add">Add Amount</button>
 
   </div>
 </template>
 
 <script>
+import Store from '../store.js'
+
 export default {
   data () {
     return {
-      amount: ''
+      store: Store
     }
   },
 
@@ -36,29 +43,16 @@ export default {
   },
 
   methods: {
+    clear() {
+      this.store.state.amount = ''
+    },
+
     press(number) {
-      this.amount += String(number);
+      this.store.state.amount += String(number)
     },
 
     add() {
-      let userId = firebase.auth().currentUser.uid;
-      var newTransactionKey = firebase.database().ref().child('transactions').push().key;
-
-      let transactionData = {
-        amount: this.amount,
-        category: this.$route.params.category
-      }
-
-      let updates = {}
-
-      updates['transactions/' + userId + '/' + (new Date).getMonth() + '/' + newTransactionKey] = transactionData
-
-      firebase.database().ref().update(updates)
-        .then(() => {
-          this.$router.go('/select-category')
-        })
-
-      this.amount = '';
+      this.$router.go('/select-category')
     }
   }
 }
@@ -67,20 +61,24 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   h1 {
-    font-size: 6rem;
+    font-size: 4rem;
   }
 
   .numbers {
+    height: 100%;
+    overflow: hidden;
     margin: auto;
+    padding: 50px;
+    padding-top: 0;
     max-width: 400px;
     display: flex;
     flex-flow: row wrap;
     justify-content: space-around;
   }
   
-  .numbers a {
-    width: 100px;
-    margin: 15px;
+  .numbers .number {
+    width: 70px;
+    margin: 5px;
     font-size: 3rem;
   }
 </style>

@@ -1,18 +1,16 @@
 <template>
-  <div class="login m-t-3">
-    <!-- Error Message -->
-    <div class="alert alert-danger" v-if="error">
-      {{ error }}
-    </div>
+  <div class="content-padded">
+    <form @submit.prevent="login">
+      <div class="alert alert-danger" v-if="error">{{ error }}</div>
 
-    <!-- Email -->
-    <input class="form-control m-b-1" type="text" v-model="email" placeholder="Email">
+      <input type="email" placeholder="Email" autofocus v-model="email">
+      <input type="password" placeholder="Password" autofocus v-model="pass">
+
+      <button class="btn btn-positive btn-block m-t-1">Login</button>
+    </form>
     
-    <!-- Pass -->
-    <input class="form-control m-b-2" type="password" v-model="pass" placeholder="Password">
-  
-    <!-- Login Button -->
-    <button class="btn btn-primary btn-block" @click="login">Login</button>
+    <a v-link="{ path: '/register', activeClass: 'active' }" class="pull-right">Register</a>
+    <a href="#">Forgot Password?</a>
   </div>
 </template>
 
