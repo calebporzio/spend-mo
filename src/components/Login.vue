@@ -6,7 +6,7 @@
       <input type="email" placeholder="Email" autofocus v-model="email">
       <input type="password" placeholder="Password" autofocus v-model="pass">
 
-      <button class="btn btn-positive btn-block m-t-1">Login</button>
+      <button class="btn btn-primary btn-block m-t-1">Login</button>
     </form>
     
     <a v-link="{ path: '/register', activeClass: 'active' }" class="pull-right">Register</a>
@@ -49,8 +49,8 @@ export default {
 
 <style scoped>
 
-.login {
-  max-width: 400px;
-  margin: auto;
+form {
+  margin: 30px 0;
 }
+
 </style>

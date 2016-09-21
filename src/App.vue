@@ -1,25 +1,24 @@
 <template>
 
-  <header class="bar bar-nav">
-    <a v-link="'/summary'">Summary</a>
+  <header class="bar bar-nav" v-if="store.ready && store.authenticated">
+    <a class="back" @click="back" v-if="$route.name != 'add-amount' && $route.name != 'add-categories'"><i class="fa fa-chevron-left"></i></a>
+    <a v-link="'/summary'" v-if="$route.name == 'add-amount'">Summary</a>
+
     <span>Spend-mo</span>
     <a v-link="'/logout'">Logout</a>
   </header>
 
-  <div class="content">
+  <header class="bar bar-nav" v-if="store.ready && !store.authenticated">
+    <span>&nbsp</span>
+    <span>Spend-mo</span>
+    <span>&nbsp</span>
+  </header>
+
+  <div class="content" v-if="store.ready">
     <router-view></router-view>
   </div>
 
-  <div id="myModalexample" class="modal">
-    <header class="bar bar-nav">
-      <a class="icon icon-close pull-right" href="#myModalexample"></a>
-      <h1 class="title">Modal</h1>
-    </header>
-
-    <div class="content">
-      <p class="content-padded">The contents of my modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</p>
-    </div>
-  </div>
+  <div class="text-center text-primary" v-else><h1><i class="fa fa-circle-o-notch fa-spin"></i></h1></div>
 
   <!-- <div style="display: none;">
     
@@ -53,22 +52,40 @@
 </template>
 
 <script>
-import Total from './components/total'
+import Total from './components/Total'
+import Store from './store.js'
 
 export default {
   replace: false,
 
-  components: {
-    total: Total
+  data() {
+    return {
+      store: Store
+    }
   },
 
   ready() {
-    //
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        user = user
+        this.store.init(() => {
+          this.store.authenticated = true;
+          this.$router.go('/add-amount')
+        });
+      } else {
+        user = null
+        this.store.ready = true;
+        this.store.authenticated = false;
+        this.$router.go('/login')
+      }
+    });
   },
 
   methods: {
     back() {
-      this.$router.go(window.history.back())
+      setTimeout(() => {
+        this.$router.go(window.history.back())
+      }, 300)
     }
   }
 }
@@ -79,5 +96,8 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .back {
+      padding: 0 20px;
+    }
   }
 </style>

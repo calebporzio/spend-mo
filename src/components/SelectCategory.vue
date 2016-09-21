@@ -1,15 +1,23 @@
 <template>
   <div>
-    <div class="categories" v-if="categories">
-      <a class="bg-primary" href="#" v-for="(index, cat) in categories" v-touch:tap="selectCategory(index)">
-        <div>
-          <span><i class="fa fa-fw {{ cat['fa-icon'] }}"></i></span><br>
-        </div>
-      </a>
+    <div class="text-center text-primary" v-if="showAdded">
+      <strong><h1 class="text-center">Added...</h1></strong>
+      <h3>Now Stop Spending!</h1>
     </div>
-    <div class="text-xs-center text-primary m-t-3" v-else>
-      <h1><i class="fa fa-circle-o-notch fa-spin"></i></h1>
+
+    <div v-else>
+      <div class="categories" v-if="categories">
+        <a class="bg-primary" href="#" v-for="(index, cat) in categories" v-touch:tap="selectCategory(index)">
+          <div>
+            <span><i class="fa fa-fw {{ cat['fa-icon'] }}"></i></span><br>
+          </div>
+        </a>
+      </div>
+      <div class="text-xs-center text-primary m-t-3" v-else>
+        <h1><i class="fa fa-circle-o-notch fa-spin"></i></h1>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -19,15 +27,17 @@ import Store from '../store.js'
 export default {
   data () {
     return {
-      store: Store,
-      categories: null
+      showAdded: false,
+      store: Store
     }
   },
 
-  ready() {
-    firebase.database().ref('/category').once('value').then(snapshot => {
-      this.categories = snapshot.val()
-    })
+  computed: {
+    categories() {
+      return _.mapValues(this.store.state.userCategories, (index, cat) => {
+        return this.store.state.categories[cat]
+      })
+    }
   },
 
   methods: {
@@ -35,15 +45,25 @@ export default {
       this.store.state.category = key;
 
       this.store.addTransaction()
-        .then(() => {
-          this.$router.go('/add-amount')
-        })
+
+      this.finishAdded();
+    },
+
+    finishAdded() {
+      this.showAdded = true
+      setTimeout(() => {
+        this.$router.go('/add-amount')
+      }, 1000);
     }
   }
 }
 </script>
 
 <style scoped> 
+  h1 {
+    margin: 30px 0;
+  }
+
   .categories {
     padding: 10px;
     margin: auto;

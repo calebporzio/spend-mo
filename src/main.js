@@ -3,13 +3,24 @@ import _ from 'lodash'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueTouch from 'vue-touch'
+import Store from './store.js'
 import App from './App'
 import Login from './components/Login'
 import Logout from './components/Logout'
 import Register from './components/Register'
 import SelectCategory from './components/SelectCategory'
 import AddAmount from './components/AddAmount'
+import AddCategories from './components/AddCategories'
 import Summary from './components/Summary'
+
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyCGBNzQ6YXfvazgQd3r98kPqQoP1GcoSp8",
+  authDomain: "spend-mo.firebaseapp.com",
+  databaseURL: "https://spend-mo.firebaseio.com",
+  storageBucket: "",
+};
+firebase.initializeApp(config);
 
 /* eslint-disable no-new */
 
@@ -24,11 +35,18 @@ router.map({
     },
 
     '/logout': {
+    	name: 'logout',
         component: Logout
     },
 
     '/register': {
         component: Register
+    },
+
+    '/add-categories': {
+    	name: 'add-categories',
+    	component: AddCategories,
+    	auth: true
     },
     
     '/select-category': {
@@ -58,15 +76,6 @@ router.beforeEach(transition => {
   }
 })
 
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-  	user = user;
-    router.go('/add-amount')
-  } else {
-  	user = null
-    router.go('/login')
-  }
-  if (! router.app) {
-  	router.start(App, 'body')
-  }
-});
+router.redirect({ '/': '/add-amount'})
+
+router.start(App, 'body')

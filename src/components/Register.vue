@@ -6,7 +6,7 @@
 
       <input type="email" placeholder="Email" autofocus v-model="email">
       <input type="password" placeholder="Password" autofocus v-model="pass">
-      <button class="btn btn-positive btn-block m-t-1">Register</button>
+      <button class="btn btn-primary btn-block m-t-1">Register</button>
     </form>
     
     <p>
@@ -50,8 +50,7 @@ export default {
 </script>
 
 <style scoped>
-.register {
-  max-width: 400px;
-  margin: auto;
+form {
+  margin: 30px 0;
 }
 </style>

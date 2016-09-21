@@ -20,7 +20,7 @@ export default {
   methods: {
     updateTotal() {
       let userId = firebase.auth().currentUser.uid;
-      let transactionsRef = firebase.database().ref('transactions/' + userId +  '/' + (new Date).getMonth())
+      let transactionsRef = firebase.database().ref('transactions/' + userId +  '/' + (new Date).getMonth()+'-'+(new Date).getFullYear())
       transactionsRef.on('value', snapshot => {
         this.total = _.reduce(snapshot.val(), (memo, tran) => {
           let add = Number(tran.amount) || 0

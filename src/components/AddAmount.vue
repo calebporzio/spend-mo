@@ -1,7 +1,7 @@
 <template>
   <div class="add-amount content-padded">
 
-    <h1 class="text-primary text-xs-center m-y-3">
+    <h1 class="text-primary text-center">
       $
       <span v-if="store.state.amount">{{ store.state.amount }}</span>
       <span v-else>0</span>
@@ -9,21 +9,21 @@
     </h1>
 
     <div class="numbers">
-      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(1)">1</div>
-      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(2)">2</div>
-      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(3)">3</div>
-      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(4)">4</div>
-      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(5)">5</div>
-      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(6)">6</div>
-      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(7)">7</div>
-      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(8)">8</div>
-      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(9)">9</div>
-      <div class="number btn btn-outlined btn-positive" >&nbsp</div>
-      <div class="number btn btn-outlined btn-positive" v-touch:tap="press(0)">0</div>
-      <div class="number btn btn-outlined btn-positive" v-touch:tap="press('.')">.</div>
+      <div class="number btn btn-outlined btn-primary" v-touch:tap="press(1)">1</div>
+      <div class="number btn btn-outlined btn-primary" v-touch:tap="press(2)">2</div>
+      <div class="number btn btn-outlined btn-primary" v-touch:tap="press(3)">3</div>
+      <div class="number btn btn-outlined btn-primary" v-touch:tap="press(4)">4</div>
+      <div class="number btn btn-outlined btn-primary" v-touch:tap="press(5)">5</div>
+      <div class="number btn btn-outlined btn-primary" v-touch:tap="press(6)">6</div>
+      <div class="number btn btn-outlined btn-primary" v-touch:tap="press(7)">7</div>
+      <div class="number btn btn-outlined btn-primary" v-touch:tap="press(8)">8</div>
+      <div class="number btn btn-outlined btn-primary" v-touch:tap="press(9)">9</div>
+      <div class="number btn btn-outlined btn-primary" >&nbsp</div>
+      <div class="number btn btn-outlined btn-primary" v-touch:tap="press(0)">0</div>
+      <div class="number btn btn-outlined btn-primary" v-touch:tap="press('.')">.</div>
     </div>
   
-    <button class="btn btn-positive btn-block" @click="add">Add Amount</button>
+    <button class="btn btn-primary btn-block" @click="add">Add Amount</button>
 
   </div>
 </template>
@@ -39,7 +39,10 @@ export default {
   },
 
   ready() {
-    //
+    // redirect to add-categories if user has no categories
+    if (_.size(this.store.state.userCategories) == 0) {
+      this.$router.go('/add-categories')
+    }
   },
 
   methods: {
@@ -62,6 +65,7 @@ export default {
 <style scoped>
   h1 {
     font-size: 4rem;
+    margin: 30px 0;
   }
 
   .numbers {
